@@ -14,6 +14,8 @@ class Test
 
     public function add(object $key, mixed $value): void
     {
-        $this->cache[$key] = $value;
+        $this->cache[$key] = $value; // valid offset access
+        unset($this->cache[$key]);   // valid offset access
+        $this->cache = new \WeakMap(); // reassigning is invalid however
     }
 }

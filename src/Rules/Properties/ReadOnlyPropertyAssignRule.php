@@ -5,6 +5,8 @@ namespace PHPStan\Rules\Properties;
 use ArrayAccess;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Node\Expr\SetOffsetValueTypeExpr;
+use PHPStan\Node\Expr\UnsetOffsetExpr;
 use PHPStan\Node\PropertyAssignNode;
 use PHPStan\Reflection\ConstructorsHelper;
 use PHPStan\Reflection\MethodReflection;
@@ -91,7 +93,11 @@ final class ReadOnlyPropertyAssignRule implements Rule
 				continue;
 			}
 
-			if ((new ObjectType(ArrayAccess::class))->isSuperTypeOf($propertyReflection->getNativeType())->yes()) {
+			$expr = $node->getAssignedExpr();
+			if (
+				(new ObjectType(ArrayAccess::class))->isSuperTypeOf($propertyReflection->getNativeType())->yes()
+				 && (($expr instanceof SetOffsetValueTypeExpr) || ($expr instanceof UnsetOffsetExpr))
+			) {
 				continue;
 			}
 
