@@ -168,4 +168,13 @@ class ReadOnlyPropertyAssignRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testBug8929(): void
+	{
+		if (PHP_VERSION_ID < 80100) {
+			self::markTestSkipped('Test requires PHP 8.1');
+		}
+
+		$this->analyse([__DIR__ . '/data/bug-8929.php'], []);
+	}
+
 }
